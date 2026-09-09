@@ -22,4 +22,7 @@ public:
     std::string lexeme;
     Position pos;
 };
+
+std::ostream& operator<<(std::ostream& strm, const TokenKind& kind);
+std::ostream& operator<<(std::ostream& strm, const Token& token);
 }  // namespace ast
