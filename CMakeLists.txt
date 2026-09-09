@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(ast LANGUAGES CXX)
+project(pinky LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_library(ast src/Token.cpp)
-target_include_directories(ast PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_subdirectory(ast)
+add_subdirectory(lexer)
