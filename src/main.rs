@@ -1,5 +1,7 @@
 use std::{env, fs::File, io::Read};
 
+use crate::lexer::Lexer;
+
 mod lexer;
 mod token;
 
@@ -21,5 +23,9 @@ fn main() {
         Err(e) => panic!("Error: couldn't read {} because {}", args[1], e),
     }
 
-    println!("{}", content);
+    let mut lexer = Lexer::new(content);
+    let tokens = lexer.tokenize();
+    for token in tokens {
+        println!("{:?}", token);
+    }
 }
