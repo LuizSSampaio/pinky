@@ -98,6 +98,7 @@ impl Lexer {
                 }
                 '0'..='9' => self.handle_digit(),
                 '\'' | '"' => self.handle_string(),
+                'a'..='z' | 'A'..='Z' | '_' => self.handle_identifier(),
                 _ => {}
             }
         }
@@ -175,6 +176,18 @@ impl Lexer {
 
         _ = self.advance();
         self.add_token(Kind::String);
+    }
+
+    fn handle_identifier(&mut self) {
+        while let Some(ch) = self.peek() {
+            if !ch.is_ascii_alphanumeric() && ch != &'_' {
+                break;
+            }
+
+            _ = self.advance();
+        }
+
+        self.add_token(Kind::Identifier);
     }
 
     fn add_token(&mut self, kind: Kind) {
