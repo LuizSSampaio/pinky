@@ -96,6 +96,7 @@ impl Lexer {
                         self.add_token(Kind::Colon);
                     }
                 }
+                '0'..='9' => self.handle_digit(),
                 _ => {}
             }
         }
@@ -137,6 +138,24 @@ impl Lexer {
 
     fn eof(&self) -> bool {
         return self.current >= self.source.len();
+    }
+
+    fn handle_digit(&mut self) {
+        while self.peek().unwrap().is_ascii_digit() {
+            _ = self.advance();
+        }
+
+        if self.peek().unwrap() == &'.' && self.lookahead(1).unwrap().is_ascii_digit() {
+            _ = self.advance();
+            while self.peek().unwrap().is_ascii_digit() {
+                _ = self.advance();
+            }
+
+            self.add_token(Kind::Float);
+            return;
+        }
+
+        self.add_token(Kind::Integer);
     }
 
     fn add_token(&mut self, kind: Kind) {
