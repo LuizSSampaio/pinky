@@ -75,7 +75,7 @@ impl Lexer {
     }
 
     fn peek(&self) -> Option<&char> {
-        self.lookahead(1)
+        self.lookahead(0)
     }
 
     fn lookahead(&self, next: usize) -> Option<&char> {
