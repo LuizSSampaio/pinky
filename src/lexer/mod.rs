@@ -97,6 +97,7 @@ impl Lexer {
                     }
                 }
                 '0'..='9' => self.handle_digit(),
+                '\'' | '"' => self.handle_string(),
                 _ => {}
             }
         }
@@ -163,6 +164,17 @@ impl Lexer {
         }
 
         self.add_token(Kind::Integer);
+    }
+
+    fn handle_string(&mut self) {
+        let delimiter = self.lookback(1).unwrap().to_owned();
+
+        while self.peek().unwrap() != &delimiter || self.lookback(1).unwrap() == &'\\' {
+            _ = self.advance();
+        }
+
+        _ = self.advance();
+        self.add_token(Kind::String);
     }
 
     fn add_token(&mut self, kind: Kind) {
