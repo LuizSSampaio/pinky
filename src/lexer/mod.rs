@@ -116,11 +116,18 @@ impl Lexer {
     }
 
     fn peek(&self) -> Option<&char> {
-        self.lookahead(0)
+        self.lookahead(1)
     }
 
     fn lookahead(&self, next: usize) -> Option<&char> {
-        match self.source.get(self.current + next) {
+        match self.source.get(self.current + next - 1) {
+            Some(ch) => Some(ch),
+            None => None,
+        }
+    }
+
+    fn lookback(&self, back: usize) -> Option<&char> {
+        match self.source.get(self.current - back) {
             Some(ch) => Some(ch),
             None => None,
         }
@@ -145,7 +152,7 @@ impl Lexer {
             _ = self.advance();
         }
 
-        if self.peek().unwrap() == &'.' && self.lookahead(1).unwrap().is_ascii_digit() {
+        if self.peek().unwrap() == &'.' && self.lookahead(2).unwrap().is_ascii_digit() {
             _ = self.advance();
             while self.peek().unwrap().is_ascii_digit() {
                 _ = self.advance();
