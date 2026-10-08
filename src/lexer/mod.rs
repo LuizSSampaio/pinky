@@ -56,6 +56,43 @@ impl Lexer {
                 ';' => self.add_token(Kind::Semicolon),
                 '?' => self.add_token(Kind::Question),
                 '%' => self.add_token(Kind::Mod),
+                '=' => {
+                    if self.next_is('=') {
+                        self.add_token(Kind::Equal);
+                    }
+                }
+                '~' => {
+                    if self.next_is('~') {
+                        self.add_token(Kind::NotEqual);
+                    } else {
+                        self.add_token(Kind::Not);
+                    }
+                }
+                '<' => {
+                    if self.next_is('=') {
+                        self.add_token(Kind::LessEqual);
+                    } else if self.next_is('<') {
+                        self.add_token(Kind::LessLess);
+                    } else {
+                        self.add_token(Kind::Less);
+                    }
+                }
+                '>' => {
+                    if self.next_is('=') {
+                        self.add_token(Kind::GreaterEqual);
+                    } else if self.next_is('>') {
+                        self.add_token(Kind::GreaterGreater);
+                    } else {
+                        self.add_token(Kind::Greater);
+                    }
+                }
+                ':' => {
+                    if self.next_is('=') {
+                        self.add_token(Kind::Assign);
+                    } else {
+                        self.add_token(Kind::Colon);
+                    }
+                }
                 _ => {}
             }
         }
