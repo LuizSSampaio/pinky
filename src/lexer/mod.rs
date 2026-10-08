@@ -35,9 +35,13 @@ impl Lexer {
                     self.column = 0;
                     self.line += 1;
                 }
-                '#' => {
-                    while self.peek() != Some(&'\n') {
-                        self.advance();
+                '-' => {
+                    if self.next_is('-') {
+                        while self.peek() != Some(&'\n') && !self.eof() {
+                            _ = self.advance();
+                        }
+                    } else {
+                        self.add_token(Kind::Minus);
                     }
                 }
                 '(' => self.add_token(Kind::LeftParen),
@@ -49,7 +53,6 @@ impl Lexer {
                 '.' => self.add_token(Kind::Dot),
                 ',' => self.add_token(Kind::Comma),
                 '+' => self.add_token(Kind::Plus),
-                '-' => self.add_token(Kind::Minus),
                 '*' => self.add_token(Kind::Star),
                 '^' => self.add_token(Kind::Caret),
                 '/' => self.add_token(Kind::Slash),
@@ -123,10 +126,6 @@ impl Lexer {
     }
 
     fn next_is(&mut self, expected: char) -> bool {
-        if self.current >= self.source.len() {
-            return false;
-        }
-
         match self.peek() {
             Some(char) if char == &expected => {
                 _ = self.advance();
@@ -134,6 +133,10 @@ impl Lexer {
             }
             _ => false,
         }
+    }
+
+    fn eof(&self) -> bool {
+        return self.current >= self.source.len();
     }
 
     fn add_token(&mut self, kind: Kind) {
