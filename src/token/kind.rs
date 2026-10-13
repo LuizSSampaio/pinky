@@ -54,6 +54,7 @@ pub enum Kind {
     End,
     Print,
     Println,
+    Ret,
 
     EndOfFile,
 }
