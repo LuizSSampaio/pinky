@@ -187,7 +187,14 @@ impl Lexer {
             _ = self.advance();
         }
 
-        self.add_token(Kind::Identifier);
+        self.add_token(
+            Kind::get_keyword(
+                &self.source[self.start..self.current]
+                    .iter()
+                    .collect::<String>(),
+            )
+            .unwrap_or(Kind::Identifier),
+        );
     }
 
     fn add_token(&mut self, kind: Kind) {
