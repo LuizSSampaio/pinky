@@ -1,8 +1,9 @@
 use std::{env, fs::File, io::Read};
 
-use crate::lexer::Lexer;
+use crate::{lexer::Lexer, parser::Parser};
 
 mod lexer;
+mod parser;
 mod token;
 
 fn main() {
@@ -23,9 +24,14 @@ fn main() {
         Err(e) => panic!("Error: couldn't read {} because {}", args[1], e),
     }
 
+    println!("=== LEXER ===");
     let mut lexer = Lexer::new(content);
     let tokens = lexer.tokenize();
     for token in tokens {
         println!("{:?}", token);
     }
+
+    println!("=== PARSER ===");
+    let mut parser = Parser::new(tokens.to_owned());
+    parser.parse();
 }
