@@ -2,6 +2,7 @@ use std::{env, fs::File, io::Read};
 
 use crate::{lexer::Lexer, parser::Parser};
 
+mod ast;
 mod lexer;
 mod parser;
 mod token;
