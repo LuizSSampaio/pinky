@@ -1,4 +1,4 @@
-use crate::token::Token;
+use crate::{ast::expression::Expression, token::Token};
 #[derive(Debug, Default)]
 pub struct Parser {
     tokens: Vec<Token>,
@@ -13,5 +13,31 @@ impl Parser {
         }
     }
 
-    pub fn parse(&mut self) {}
+    pub fn parse(&mut self) -> Expression {
+        self.expr()
+    }
+
+    fn expr(&mut self) -> Expression {
+        self.term();
+        todo!()
+    }
+
+    fn term(&mut self) -> Expression {
+        self.factor();
+        todo!()
+    }
+
+    fn factor(&mut self) -> Expression {
+        self.unary();
+        todo!()
+    }
+
+    fn unary(&mut self) -> Expression {
+        self.primary();
+        todo!()
+    }
+
+    fn primary(&mut self) -> Expression {
+        todo!()
+    }
 }
