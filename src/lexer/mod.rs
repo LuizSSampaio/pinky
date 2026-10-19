@@ -103,6 +103,7 @@ impl Lexer {
             }
         }
 
+        self.add_token(Kind::EndOfFile);
         &self.tokens
     }
 
