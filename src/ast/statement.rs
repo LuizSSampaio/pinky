@@ -1,5 +1,5 @@
 #[derive(Debug, Clone)]
-pub enum Expression {
+pub enum Statement {
     Assignment {},
     While {},
 }
