@@ -204,7 +204,11 @@ impl Lexer {
             lexeme: self.source[self.start..self.current].iter().collect(),
             position: Position {
                 row: self.line,
-                column: self.column - 1,
+                column: if self.column > 1 {
+                    self.column - 1
+                } else {
+                    self.column
+                },
             },
         });
     }
