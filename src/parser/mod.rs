@@ -21,27 +21,73 @@ impl Parser {
     }
 
     fn expr(&mut self) -> Expression {
-        self.term();
-        todo!()
+        let mut expr = self.term();
+
+        while self.match_tokens(&[Kind::Plus, Kind::Minus]) {
+            let operator = self.previous().unwrap().to_owned();
+            let right = self.term();
+            expr = Expression::Binary {
+                operator,
+                left: Box::new(expr),
+                right: Box::new(right),
+            }
+        }
+
+        expr
     }
 
     fn term(&mut self) -> Expression {
-        self.factor();
-        todo!()
+        let mut expr = self.factor();
+
+        while self.match_tokens(&[Kind::Star, Kind::Slash]) {
+            let operator = self.previous().unwrap().to_owned();
+            let right = self.factor();
+            expr = Expression::Binary {
+                operator,
+                left: Box::new(expr),
+                right: Box::new(right),
+            }
+        }
+
+        expr
     }
 
     fn factor(&mut self) -> Expression {
-        self.unary();
-        todo!()
+        self.unary()
     }
 
     fn unary(&mut self) -> Expression {
-        self.primary();
-        todo!()
+        if self.match_tokens(&[Kind::Not, Kind::Minus, Kind::Plus]) {
+            let operator = self.previous().unwrap().to_owned();
+            let operand = self.unary();
+
+            return Expression::Unary {
+                operator,
+                right: Box::new(operand),
+            };
+        }
+
+        self.primary()
     }
 
     fn primary(&mut self) -> Expression {
-        todo!()
+        if self.match_tokens(&[Kind::Integer]) {
+            return Expression::Integer(self.previous().unwrap().lexeme.parse::<i64>().unwrap());
+        }
+        if self.match_tokens(&[Kind::Float]) {
+            return Expression::Float(self.previous().unwrap().lexeme.parse::<f64>().unwrap());
+        }
+
+        if self.match_tokens(&[Kind::LeftParen]) {
+            let expr = self.expr();
+            if self.match_tokens(&[Kind::RightParen]) {
+                return Expression::Grouping(Box::new(expr));
+            }
+
+            panic!("ERROR: Missing ')'")
+        }
+
+        panic!("ERROR: Unknow token {:?}", self.peek())
     }
 
     fn match_tokens(&mut self, kinds: &[Kind]) -> bool {
