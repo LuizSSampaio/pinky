@@ -21,11 +21,15 @@ impl Parser {
     }
 
     fn expr(&mut self) -> Expression {
-        let mut expr = self.term();
+        self.addition()
+    }
+
+    fn addition(&mut self) -> Expression {
+        let mut expr = self.multiplication();
 
         while self.match_tokens(&[Kind::Plus, Kind::Minus]) {
             let operator = self.previous().unwrap().to_owned();
-            let right = self.term();
+            let right = self.multiplication();
             expr = Expression::Binary {
                 operator,
                 left: Box::new(expr),
@@ -36,12 +40,12 @@ impl Parser {
         expr
     }
 
-    fn term(&mut self) -> Expression {
-        let mut expr = self.factor();
+    fn multiplication(&mut self) -> Expression {
+        let mut expr = self.unary();
 
         while self.match_tokens(&[Kind::Star, Kind::Slash]) {
             let operator = self.previous().unwrap().to_owned();
-            let right = self.factor();
+            let right = self.unary();
             expr = Expression::Binary {
                 operator,
                 left: Box::new(expr),
@@ -50,10 +54,6 @@ impl Parser {
         }
 
         expr
-    }
-
-    fn factor(&mut self) -> Expression {
-        self.unary()
     }
 
     fn unary(&mut self) -> Expression {
