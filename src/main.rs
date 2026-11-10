@@ -34,5 +34,5 @@ fn main() {
 
     println!("=== PARSER ===");
     let mut parser = Parser::new(tokens.to_owned());
-    parser.parse();
+    println!("{:?}", parser.parse());
 }
