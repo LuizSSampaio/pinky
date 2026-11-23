@@ -190,14 +190,17 @@ impl Lexer {
 
         loop {
             match self.peek() {
-                Some(&ch)
-                    if ch == delimiter
-                        && *self
-                            .lookback(1)
-                            .expect("at least the opening delimiter was consumed")
-                            != '\\' =>
-                {
+                Some(&ch) if ch == delimiter => {
                     break;
+                }
+                Some(&'\\') => {
+                    self.advance();
+                    if self.advance().is_none() {
+                        return Err(LexerError::UnterminatedString {
+                            column: start_column,
+                            line: start_line,
+                        });
+                    }
                 }
                 Some(_) => {
                     self.advance();
