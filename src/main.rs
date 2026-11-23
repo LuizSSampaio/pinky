@@ -1,5 +1,7 @@
 use std::{env, fs::File, io::Read};
 
+use log::error;
+
 use crate::{lexer::Lexer, parser::Parser};
 
 mod ast;
@@ -27,7 +29,13 @@ fn main() {
 
     println!("=== LEXER ===");
     let mut lexer = Lexer::new(content);
-    let tokens = lexer.tokenize();
+    let tokens = match lexer.tokenize() {
+        Ok(tokens) => tokens,
+        Err(e) => {
+            error!("{}", e);
+            return;
+        }
+    };
     for token in tokens {
         println!("{:?}", token);
     }
