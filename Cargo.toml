@@ -5,4 +5,3 @@ edition = "2024"
 
 [dependencies]
 thiserror = "2.0.21"
-log = "0.4.35"

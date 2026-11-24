@@ -1,7 +1,5 @@
 use std::{env, fs::File, io::Read};
 
-use log::error;
-
 use crate::{lexer::Lexer, parser::Parser};
 
 mod ast;
@@ -32,7 +30,7 @@ fn main() {
     let tokens = match lexer.tokenize() {
         Ok(tokens) => tokens,
         Err(e) => {
-            error!("{}", e);
+            println!("{}", e);
             return;
         }
     };
