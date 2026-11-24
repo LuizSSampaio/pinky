@@ -40,5 +40,11 @@ fn main() {
 
     println!("=== PARSER ===");
     let mut parser = Parser::new(tokens.to_owned());
-    println!("{:?}", parser.parse());
+    match parser.parse() {
+        Ok(expr) => println!("a {:?}", expr),
+        Err(e) => {
+            println!("{}", e);
+            return;
+        }
+    }
 }
